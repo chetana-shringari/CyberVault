@@ -1,0 +1,285 @@
+/* ===== SAGE GREEN LUXURY UI ===== */
+
+:root {
+  --sage-light: #E8F0E6;
+  --sage: #9CAF88;
+  --sage-dark: #6E8B74;
+  --cream: #F5F7F4;
+  --white: #ffffff;
+  --text-dark: #2E3A34;
+  --text-soft: #5F6F65;
+  --accent: #C8A97E;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Body */
+body {
+  background: var(--sage-light);
+  color: var(--text-dark);
+}
+
+/* ===== NAVBAR ===== */
+
+.topbar {
+  background: var(--white);
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--sage-dark);
+}
+
+nav a {
+  text-decoration: none;
+  margin-left: 30px;
+  color: var(--text-soft);
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: var(--sage-dark);
+}
+
+/* ===== HERO ===== */
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 50px 20px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.hero h1 {
+  font-size: 38px;
+  color: var(--sage-dark);
+  margin-bottom: 15px;
+}
+
+.lead {
+  color: var(--text-soft);
+  font-size: 18px;
+}
+
+/* ===== CARDS ===== */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.card {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h2 {
+  margin-bottom: 20px;
+  color: var(--sage-dark);
+}
+
+/* ===== INPUTS ===== */
+
+.card input,
+.card select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #d9e2d6;
+  background: var(--cream);
+  outline: none;
+  transition: 0.3s;
+}
+
+.card input:focus,
+.card select:focus {
+  border-color: var(--sage);
+}
+
+
+/* ===== BUTTONS ===== */
+
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+  letter-spacing: 0.5px;
+  font-size: 15px;
+}
+
+/* Sage (Encrypt) */
+.btn-primary {
+  background: #8FAF7C;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #6E8B74;
+}
+
+/* Warm Yellow (Decrypt Upload) */
+.btn-warning {
+  background: #E6B566;
+  color: white;
+}
+
+.btn-warning:hover {
+  background: #d4a455;
+}
+
+/* Soft Rose (Server Decrypt) */
+#decryptServerBtn {
+  background: #E58E9B;
+  color: white;
+}
+
+#decryptServerBtn:hover {
+  background: #cf7a88;
+}
+
+
+/* ===== FILE SECTION ===== */
+
+.files-section {
+  margin-top: 80px;
+}
+
+.files-section h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  color: var(--sage-dark);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+ul {
+  list-style: none;
+}
+
+ul li {
+  background: var(--white);
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: 0.3s;
+}
+
+ul li:hover {
+  transform: translateX(5px);
+}
+
+ul li a {
+  text-decoration: none;
+  color: var(--sage-dark);
+  font-weight: 500;
+}
+
+/* ===== MESSAGE ===== */
+
+.msg {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--sage-dark);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+}
+
+/* ===== PROFILE PAGE ===== */
+
+.profile-card {
+  text-align: center;
+  padding: 40px;
+}
+
+.profile-img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #9CAF88;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.profile-role {
+  color: #6E8B74;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-btn {
+  padding: 12px 25px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  color: white;
+  transition: 0.3s;
+}
+
+.github {
+  background: #333;
+}
+
+.github:hover {
+  background: #000;
+}
+
+.linkedin {
+  background: #0A66C2;
+}
+
+.linkedin:hover {
+  background: #084c94;
+}
+

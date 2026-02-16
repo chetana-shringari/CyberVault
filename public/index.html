@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CyberVault — File Encrypter</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Chetana Shringari</div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/features.html">Features</a>
+        <a href="/profile.html">Profile</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <h1>Secure file encryption & decryption</h1>
+        <p class="lead">Protect sensitive files with password-derived AES-256-GC
+M encryption. Manage encrypted files stored on this server.</p>                       </section>
+
+      <section class="cards">
+        <div class="card">
+          <h2>Encrypt</h2>
+          <form id="encForm" enctype="multipart/form-data">
+            <input type="file" id="encFile" name="file" required />
+            <input type="password" id="encPass" name="password" placeholder="Ent
+er password" required />                                                                    <button type="submit" class="btn btn-primary">Encrypt</button>      
+            <p id="encMsg" class="msg"></p>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Decrypt (upload)</h2>
+          <form id="decForm" enctype="multipart/form-data">
+            <input type="file" id="decFile" name="file" required />
+            <input type="password" id="decPass" name="password" placeholder="Ent
+er password" required />                                                                    <button type="submit" class="btn btn-warning">Decrypt</button>      
+            <p id="decMsg" class="msg"></p>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Decrypt (server)</h2>
+          <div class="row">
+            <select id="serverFiles">
+              <option value="">Select a file...</option>
+            </select>
+            <input type="password" id="serverPass" placeholder="Enter password" />
+            <button id="decryptServerBtn" class="btn btn-warning">Decrypt</button>
+            <p id="serverMsg" class="msg"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="files-section">
+        <h2>Server Files</h2>
+        <div class="row">
+          <div class="col">
+            <h3>Encrypted Files</h3>
+            <ul id="encList"></ul>
+          </div>
+          <div class="col">
+            <h3>Decrypted Files</h3>
+            <ul id="decList"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Encrypt form
+      document.getElementById('encForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const msg = document.getElementById('encMsg');
+        msg.textContent = 'Encrypting...';
+        try {
+          const res = await fetch('/encrypt', { method: 'POST', body: formData });
+          const data = await res.json();
+          msg.textContent = data.message;
+          loadFiles();
+        } catch (err) {
+          msg.textContent = 'Error: ' + err.message;
+        }
+      });
+
+      // Decrypt upload form
+      document.getElementById('decForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const msg = document.getElementById('decMsg');
+        msg.textContent = 'Decrypting...';
+        try {
+          const res = await fetch('/decrypt', { method: 'POST', body: formData });
+          const data = await res.json();
+          msg.textContent = data.message;
+          loadFiles();
+        } catch (err) {
+          msg.textContent = 'Error: ' + err.message;
+        }
+      });
+
+      // Decrypt server file
+      document.getElementById('decryptServerBtn').addEventListener('click', async () => {
+        const filename = document.getElementById('serverFiles').value;
+        const password = document.getElementById('serverPass').value;
+        if (!filename || !password) return alert('Select file and enter password');
+        const msg = document.getElementById('serverMsg');
+        msg.textContent = 'Decrypting...';
+        try {
+          const res = await fetch('/decrypt-file', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename, password })
+          });
+          const data = await res.json();
+          msg.textContent = data.message;
+          loadFiles();
+        } catch (err) {
+          msg.textContent = 'Error: ' + err.message;
+        }
+      });
+
+      // Load files
+      async function loadFiles() {
+        try {
+          const [encRes, decRes] = await Promise.all([
+            fetch('/files'),
+            fetch('/dec-files')
+          ]);
+          const encData = await encRes.json();
+          const decData = await decRes.json();
+
+          // Populate server files select
+          const select = document.getElementById('serverFiles');
+          select.innerHTML = '<option value="">Select a file...</option>';
+          encData.files.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f;
+            opt.textContent = f;
+            select.appendChild(opt);
+          });
+
+          // Populate lists
+          const encList = document.getElementById('encList');
+          const decList = document.getElementById('decList');
+          encList.innerHTML = '';
+          decList.innerHTML = '';
+          encData.files.forEach(f => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '/download?name=' + encodeURIComponent(f);
+            a.textContent = f;
+            li.appendChild(a);
+            encList.appendChild(li);
+          });
+          decData.files.forEach(f => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = '/download?name=' + encodeURIComponent(f);
+            a.textContent = f;
+            li.appendChild(a);
+            decList.appendChild(li);
+          });
+        } catch (err) {
+          console.error('Load files error:', err);
+        }
+      }
+
+      // Load files on page load
+      loadFiles();
+    </script>
+  </body>
+</html>
